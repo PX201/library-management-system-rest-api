@@ -21,9 +21,10 @@ public class LibraryManagementSystemApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-//				registry.addMapping("/**")
-//						.allowedMethods("*")
-//						.allowedOrigins("http://localhost:3000");
+				/*
+				 * registry.addMapping("/**") .allowedMethods("*")
+				 * .allowedOrigins("*");//http://localhost:3000
+				 */
 				 registry.addMapping("/**")
                  .allowedMethods("GET", "POST", "PUT", "DELETE")
                  .allowedOrigins("http://localhost:3000")			//for local host

@@ -81,5 +81,13 @@ public class LibrarianResource {
 		System.out.println("inside endPoint");
 		return ResponseEntity.ok(service.updateInfo(librarianDto));
 	}
+	
+	@PostMapping("/pass-reset/{id}")
+	public ResponseEntity<Void> resetPassword(@PathVariable Long id,@RequestParam String newpassword){
+		if(service.resetPassword(id, newpassword))
+			return ResponseEntity.status(HttpStatus.OK).build();
+		
+		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+	}
 
 }

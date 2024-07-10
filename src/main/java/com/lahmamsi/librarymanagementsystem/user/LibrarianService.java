@@ -48,7 +48,7 @@ public class LibrarianService {
 
 	}
 
-    // Method to add a new librarian based on incoming request
+	// Method to add a new librarian based on incoming request
 	public Librarian add(AuthRequest request) {
 
 		var librarian = new Librarian();
@@ -62,11 +62,12 @@ public class LibrarianService {
 	}
 
 	public LibrarianResponseDto findByEmail(String librarianEmail) {
-		 // Finding librarian by email and throwing an exception if not found
-		Librarian librarian =  librarianRepository.findByEmail(librarianEmail)
-													.orElseThrow(() -> new LibraryManagmentException("Can't find librarian with email " + librarianEmail));
-        // Returning a response DTO containing librarian details
-		return new LibrarianResponseDto(librarian.getId(), librarian.getFirstName(), librarian.getLastName(), librarian.getEmail(), librarian.getPhoneNumber(), librarian.getRoles());
+		// Finding librarian by email and throwing an exception if not found
+		Librarian librarian = librarianRepository.findByEmail(librarianEmail)
+				.orElseThrow(() -> new LibraryManagmentException("Can't find librarian with email " + librarianEmail));
+		// Returning a response DTO containing librarian details
+		return new LibrarianResponseDto(librarian.getId(), librarian.getFirstName(), librarian.getLastName(),
+				librarian.getEmail(), librarian.getPhoneNumber(), librarian.getRoles());
 	}
 
 	public LibrarianResponseDto updateInfo(@Valid LibrarianDTO librarianDTO) {
@@ -83,8 +84,9 @@ public class LibrarianService {
 
 		// Save the updated Librarian entity
 		var librarian = librarianRepository.save(existingLibrarian);
-		
-		return new LibrarianResponseDto(librarian.getId(), librarian.getFirstName(), librarian.getLastName(), librarian.getEmail(), librarian.getPhoneNumber(), librarian.getRoles());
+
+		return new LibrarianResponseDto(librarian.getId(), librarian.getFirstName(), librarian.getLastName(),
+				librarian.getEmail(), librarian.getPhoneNumber(), librarian.getRoles());
 	}
 
 	public LibrarianResponseDto updateRole(long id, Set<Role> newRoles) {
@@ -94,14 +96,14 @@ public class LibrarianService {
 
 		if (!newRoles.isEmpty()) {
 			librarian.setRoles(newRoles);
-			var updatedLibrarian =  librarianRepository.save(librarian);
-			var librarianResponse =  new LibrarianResponseDto();
+			var updatedLibrarian = librarianRepository.save(librarian);
+			var librarianResponse = new LibrarianResponseDto();
 			librarianResponse.setFirstName(updatedLibrarian.getFirstName());
 			librarianResponse.setLastName(updatedLibrarian.getLastName());
 			librarianResponse.setEmail(updatedLibrarian.getEmail());
 			librarianResponse.setPhoneNumber(updatedLibrarian.getPhoneNumber());
 			librarianResponse.setRoles(updatedLibrarian.getRoles());
-			
+
 			return librarianResponse;
 		}
 		return null;
@@ -124,35 +126,46 @@ public class LibrarianService {
 
 	}
 
+	public boolean resetPassword(Long id, String newPassword) {
+		Librarian librarian = librarianRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Librarian not found"));
+		librarian.setPassword(encoder.encode(newPassword));
+		librarianRepository.save(librarian);
+		
+		return true;
+	}
+
 	public List<LibrarianResponseDto> retrieveAllLibrarians() {
 		// TODO Auto-generated method stub
-		var librarians =  librarianRepository.findAll();
-		return librarians.stream().map(librarian -> new LibrarianResponseDto(librarian.getId(), librarian.getFirstName(), librarian.getLastName(), librarian.getEmail(), librarian.getPhoneNumber(), librarian.getRoles())).toList();
+		var librarians = librarianRepository.findAll();
+		return librarians.stream()
+				.map(librarian -> new LibrarianResponseDto(librarian.getId(), librarian.getFirstName(),
+						librarian.getLastName(), librarian.getEmail(), librarian.getPhoneNumber(),
+						librarian.getRoles()))
+				.toList();
 	}
-	
-    // Method to create a default admin user if not present in the repository
+
+	// Method to create a default admin user if not present in the repository
 	public void createDefaultAdminUser() {
-	    Librarian admin = librarianRepository.findByEmail(defaultAdminEmail).orElse(new Librarian());
+		Librarian admin = librarianRepository.findByEmail(defaultAdminEmail).orElse(new Librarian());
 
-	    // Check if the email is null or blank
-	    if (admin.getEmail() == null || admin.getEmail().isBlank()) {
-	        admin.setFirstName(defaultAdminFirstName);
-	        admin.setLastName(defaultAdminLastName);
-	        admin.setEmail(defaultAdminEmail);
-	        admin.setPhoneNumber(defaultAdminPhoneNumber);
-	    } else {
-	        // If not null or blank, ensure it matches the default email
-	        if (!admin.getEmail().equals(defaultAdminEmail)) {
-	            admin.setEmail(defaultAdminEmail);
-	        }
-	    }
+		// Check if the email is null or blank
+		if (admin.getEmail() == null || admin.getEmail().isBlank()) {
+			admin.setFirstName(defaultAdminFirstName);
+			admin.setLastName(defaultAdminLastName);
+			admin.setEmail(defaultAdminEmail);
+			admin.setPhoneNumber(defaultAdminPhoneNumber);
+		} else {
+			// If not null or blank, ensure it matches the default email
+			if (!admin.getEmail().equals(defaultAdminEmail)) {
+				admin.setEmail(defaultAdminEmail);
+			}
+		}
 
-	    admin.setPassword(encoder.encode(defaultAdminPassword)); // Encode the password
-	    admin.setRoles(Collections.singleton(Role.ADMIN)); // Set the admin role
+		admin.setPassword(encoder.encode(defaultAdminPassword)); // Encode the password
+		admin.setRoles(Collections.singleton(Role.ADMIN)); // Set the admin role
 
-	    librarianRepository.save(admin);
+		librarianRepository.save(admin);
 	}
 
-
-	
 }

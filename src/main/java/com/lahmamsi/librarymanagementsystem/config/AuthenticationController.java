@@ -2,14 +2,16 @@ package com.lahmamsi.librarymanagementsystem.config;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 
+import com.lahmamsi.librarymanagementsystem.user.AuthRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.lahmamsi.librarymanagementsystem.user.AuthRequest;
 
 
 /**
@@ -44,5 +46,17 @@ public class AuthenticationController {
 	public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthRequest request) throws UserPrincipalNotFoundException{
 		
 		return ResponseEntity.ok(authService.authenticate(request));
+	}
+	
+	@PostMapping("/resetpass/{email}")
+	public ResponseEntity<Void> passwordResetReq(@PathVariable String email, @RequestHeader("X-Base-URL") String baseURL){		
+		try {
+			authService.sendPasswordResetLink(email, baseURL);
+			
+		} catch (UserPrincipalNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }

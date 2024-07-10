@@ -32,6 +32,7 @@ public class SecurityConfig {
 				.formLogin(form -> form.disable())
 				.authorizeHttpRequests(auth -> 
 						auth.requestMatchers("/api/v1/auth/login").permitAll()
+								.requestMatchers("/api/v1/auth/resetpass/**").permitAll()
 								.requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
 								.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 								.requestMatchers("/api/v1/librarians/Admin/**").hasAnyAuthority("Role_" + Role.ADMIN.name())
