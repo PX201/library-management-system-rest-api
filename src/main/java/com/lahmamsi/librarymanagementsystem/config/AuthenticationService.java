@@ -1,20 +1,14 @@
 package com.lahmamsi.librarymanagementsystem.config;
 
+import static com.lahmamsi.librarymanagementsystem.utilities.Utils.sendEmail;
+
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.HashSet;
-import java.util.Properties;
 
 import com.lahmamsi.librarymanagementsystem.user.AuthRequest;
 import com.lahmamsi.librarymanagementsystem.user.Librarian;
 import com.lahmamsi.librarymanagementsystem.user.LibrarianRepository;
 import com.lahmamsi.librarymanagementsystem.user.Role;
-import jakarta.mail.Authenticator;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.internet.MimeMessage.RecipientType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -94,33 +88,10 @@ public class AuthenticationService {
 	}
 	
 	private void sendResetLink(String resetLink, String email) {
-		Properties prop = new Properties();
-		prop.put("mail.smtp.host", "smtp.gmail.com");
-		prop.put("mail.smtp.port", "587");
-		prop.put("mail.smtp.auth", "true");
-		prop.put("mail.smtp.starttls.enable", "true");
-		prop.put("mail.smtp.ssl.trust", "*");
 		
-		String username = "lahmamsiaiman99@gmail.com";
-		String password = "xeubprxkimtvyljr";
-		
-		Session session = Session.getDefaultInstance(prop, new Authenticator() {
-			 protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
-	                return new jakarta.mail.PasswordAuthentication(username, password);
-	            }
-		});
-		try {
-			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(username));
-			message.addRecipients(RecipientType.TO ,email);
-			message.setSubject("Reset Your Password..");
-			message.setText("Your reset link is " + resetLink);
-			
-			Transport.send(message);
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String subject = "Reset Your Password..";
+		String body = "Your reset link is " + resetLink;
+		sendEmail(email, subject, body);
 		
 	}
 	
