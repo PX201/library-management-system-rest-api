@@ -5,17 +5,24 @@ The Library Management System API provides functionality for managing books, bor
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [Frontend Repository](#frontend-repository)
 - [Setup](#setup)
 - [Features](#features)
 - [Endpoints](#endpoints)
 - [Dependencies](#dependencies)
 - [Getting Started](#getting-started)
-- [Building and Running](#Building-and-Running)
+- [Building and Running](#building-and-Running)
 - [License](#license)
 
 ## Introduction
 
 This API serves as the backend for a library management system, facilitating various operations such as book management, borrower management, transaction handling, and librarian administration.
+
+## Frontend Repository
+
+The frontend for this application is implemented using React.js, providing an intuitive and user-friendly interface for managing the library system.  
+You can find the frontend repository here: [Library Management System - Frontend](https://github.com/your-username/library-management-frontend)
+
 
 ## Setup
 
@@ -34,8 +41,8 @@ This API serves as the backend for a library management system, facilitating var
 ## Features
 
 - **Book Management:** Add, update, delete, and retrieve books. Track book details, availability, and borrowing history.
-- **Borrower Management:** Register borrowers, manage their details, and track their borrowing activity.
-- **Transaction Handling:** Record borrowing and return transactions, manage late fees, and handle damage fines.
+- **Borrower Management:** Register borrowers, manage their details and track their borrowing activity.
+- **Transaction Handling:** Record borrowing and return transactions, manage late fees and handle damage fines.
 - **Librarian Administration:** Administer librarian accounts, roles, and permissions.
 
 ## Endpoints
