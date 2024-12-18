@@ -21,7 +21,7 @@ This API serves as the backend for a library management system, facilitating var
 ## Frontend Repository
 
 The frontend for this application is implemented using React.js, providing an intuitive and user-friendly interface for managing the library system.  
-You can find the frontend repository here: [Library Management System - Frontend](https://github.com/your-username/library-management-frontend)
+You can find the frontend repository here: [Library Management System - Frontend](https://github.com/PX201/library-management-system-frontend)
 
 
 ## Setup
